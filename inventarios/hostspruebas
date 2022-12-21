@@ -1,0 +1,18 @@
+[targets]
+target1 ansible_host=192.168.1.139
+target2 ansible_host=192.168.1.140
+localhost ansible_connection=local
+[ESPANHA]
+target1
+target2
+localhost
+[MADRID]
+target1
+localhost
+[BARCELONA]
+target2
+[SERVWEB]
+target1
+target2
+[BDWEB]
+localhost

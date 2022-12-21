@@ -1,0 +1,36 @@
+- name: Crear Ficheros usando variables
+  hosts: localhost
+  connection: local
+  vars:
+    - miip: "1.1.1.1"
+    - milista: ["apache2","mariasb","php5"]
+    - milistaLarga:
+        - apache
+        - mariadb
+        - php5
+    - midic:
+      - web: apache2
+      - bd: mariadb
+      - script: php5
+    - midiclargo: {web: 'apache2', bd: 'mariadb', script: 'php5'}
+    - mitexto: |
+       primera linea
+       segunda linea
+       tercera linea
+    - mitextolargo: >
+       inicio linea
+       continuacion linea
+       fin de linea	
+  tasks:
+    - name: Crear ficheros con variables
+      template: 
+        src: plantillas/hosts.j2
+        dest: /tmp/hosts
+
+    - debug: var=miip
+    - debug: var=milista
+    - debug: var=milistaLarga
+    - debug: var=midic.web
+    - debug: var=milistalargo
+    - debug: var=mitexto
+    - debug: var=mitextolargo

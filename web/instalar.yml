@@ -1,0 +1,4 @@
+- name: Instalar y configurar apache2
+  hosts: all
+  roles:
+    - apache2

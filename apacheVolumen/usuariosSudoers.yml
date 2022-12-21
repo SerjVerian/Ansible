@@ -1,0 +1,26 @@
+- name: Creación de usuarios, y permisos de sudo sin pass
+  hosts: all
+  vars:
+    - usuarios: ["Pepe","Paco","Julio"]
+    - grupoPrueba: "webadmin"
+    - upassword: "12345"
+  tasks:
+    - include: includeCreacionUsuarios.yml
+    - name: "Creamos fichero sudoers grupo"
+      file:
+        path: "/etc/sudoers.d/{{ grupoPrueba }}"
+        state: touch
+        mode: "0644"
+        owner: "root"
+        group: "root"
+    - name: "Permisos para que todos los usuarios del grupo {{ grupoPrueba }} hagan sudo sin pass"
+      lineinfile:
+        dest: "/etc/sudoers.d/{{ grupoPrueba }}"
+        state: present
+        line: "%{{ grupoPrueba }} ALL=(ALL) NOPASSWD: ALL"
+  #  - name: "Permisos para que todos los usuarios del grupo {{ grupoPrueba }} hagan sudo sin pass"
+  #    lineinfile:
+  #      dest: "/etc/sudoers"
+  #      state: "present"
+  #      regexp: "^%administrador"
+  #      line: "%{{ grupoPrueba }} ALL=(ALL) NOPASSWD: ALL"

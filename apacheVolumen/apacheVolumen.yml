@@ -1,0 +1,44 @@
+- name: Instalacion y configuracion inicial unidades apache
+  hosts: all 
+  vars:
+    - usuarios: ["Pepe","Paco","Julio"]
+    - grupoPrueba: "apache" #grupo por defecto en apache.conf
+    - upassword: "12345"
+  tasks:
+    - include: includeCreacionUsuarios.yml
+    - include: instalar_apache2.yml
+    #- include: creacionParticionesApache.yml
+
+    - name: "Creamos los puntos de montaje-Directorios"
+      file:
+        path: /opt/apache/estaticos
+        state: directory
+        group: "{{ grupoPrueba }}" 
+        mode: 0775
+        recurse: yes
+      file:
+        path: /var/apache/logs
+        state: directory
+        group: "{{ grupoPrueba }}" 
+        mode: 0775
+        recurse: yes
+
+  #  - name: "Montamos unidades"
+  #    mount:
+  #      src: /opt/apache/logs
+  #      path: /mnt/logs
+  #      fstype: xfs
+  #      state: absent
+  #  - name: "Montamos unidades"
+  #    mount:
+  #      src: /opt/apache/estaticos
+  #      path: /mnt/estaticos
+  #      fstype: xfs
+  #      state: absent    
+      
+    - name: Crear ficheros con variables
+      template:
+        src: plantillas/hosts.j2
+        dest: /var/www/html/index.html    #directorio por defecto, apache.conf
+
+      

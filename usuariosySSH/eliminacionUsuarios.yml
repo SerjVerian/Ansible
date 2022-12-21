@@ -1,0 +1,20 @@
+- name: Creación usuarios
+  hosts: all
+  vars:
+    - usuario1: "Pepe"
+    - usuario2: "Paco"
+    - usuario3: "Julio"
+    - usuario4: "Pepe"
+    - grupoPrueba: "webadmin " 
+  tasks:
+    - name: Eliminar Usuarios
+      user: name={{ item }} state=absent
+      with_items:
+      - "{{ usuario1 }}"
+      - "{{ usuario2 }}"
+      - "{{ usuario3 }}"
+      - "{{ usuario4 }}"
+
+      
+        
+        

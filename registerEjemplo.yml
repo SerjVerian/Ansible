@@ -1,0 +1,15 @@
+- name: Hora sistema 
+  hosts: all 
+  tasks:
+    - name: Ejecuto Comando 
+      command: uptime
+      register: salida
+    - name: mostrar salida
+      debug: var=salida
+
+    - name: uptime2  Sistema
+      command: uptime
+      register: salida_uptime2
+    - name: mostrar salida uptime2
+      debug: var=salida_uptime2.stdout
+

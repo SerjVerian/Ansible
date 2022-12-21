@@ -1,0 +1,35 @@
+[win]
+192.168.1.133
+
+[win:vars]
+ansible_ssh_user = norbertozx10@gmail.com 
+ansible_ssh_pass = Viewnext1
+ansible_ssh_port = 5985
+ansible_connection = winrm
+ansible_winrm_transport = basic
+ansible_winrm_server_cert_validation = ignore
+
+
+[targets]
+target1 ansible_host=192.168.1.135
+target2 ansible_host=192.168.1.136
+localhost ansible_connection=local
+[ESPANHA]
+target1
+target2
+localhost
+guindows
+[MADRID]
+target1
+localhost
+[BARCELONA]
+target2
+[SERVWEB]
+target1
+target2
+[BDWEB]
+localhost
+[LINUX]
+localhost
+target1
+target2

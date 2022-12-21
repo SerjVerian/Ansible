@@ -1,0 +1,36 @@
+- name: Creación usuarios
+  hosts: all
+  vars:
+    - usuario1: "Pepe"
+    - usuario2: "Paco"
+    - usuario3: "Julio"
+    - usuario4: "Pepe"
+    - grupoPrueba: "webadmin" 
+    - upassword: "12345"
+  tasks:
+    - name: Crear Grupo
+      group: name={{ grupoPrueba }} state=present
+
+    - name: Crear Usuarios
+      #Encripta la passw
+      #user: name={{ item.nombre }} password= {{ upassword | password_hash('sha512') }} state=present groups={{ item.grupo }}
+      #Desabilita la passw, incluyendo ! al principio en el fichero passwd
+      user: name={{ item.nombre }} password= {{ upassword | password_hash('sha512') }} state=present groups={{ item.grupo }}
+      with_items:
+      - {nombre: "{{ usuario1 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario2 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario3 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario4 }}", grupo: "{{ grupoPrueba }}"}
+    - name: Add authorized keys
+      authorized_key:
+        user: "{{ item }}"
+        state: present
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjW1O1VTFrK9qW6a0WvSdt0BQ4tbwIGqkEKlvXFi8fv5DHebJOQddBEPUJz0nOSpfImvJGRy8heljsVHMGKXWUJnz417HaojoZLtO6etw0yifFY+N8oFgnraVvY+QSpuDyYUezEWIW8vpJA2uRvup78cn+p043yyQMll7cslg8Rrz7esVwoCkqP1STOppcMyir6WOhKOzfzQ6On6ROqvW1+eGWIGfia27pEV+t+0ngPKWbAPWdPViISgZZ/W9mfoJ/LnvOkn2pH+BRGPeTwoC/tX6JCnQIdPBxHrinzRGLq70XqpTpDRBWkCx4H9YbyUGnoOr2rVNBf9R1ejX3jah3 root@ansible-controller"
+      with_items:
+      - "{{ usuario1 }}"
+      - "{{ usuario2 }}"
+      - "{{ usuario3 }}"
+      - "{{ usuario4 }}"
+  
+    
+    

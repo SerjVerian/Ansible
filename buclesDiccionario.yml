@@ -1,0 +1,9 @@
+- name: Primer Play
+  hosts: all 
+  tasks:
+    - name: Crear Usuarios 
+      user: name={{ item.nombre }} state=present groups={{ item.grupo }}
+      with_items:
+        - {nombre: usuarioCurso1 , grupo: www-data} 
+        - {nombre: usuarioCurso2 , grupo: www-data}
+        - {nombre: usuarioCurso3 , grupo: www-data}

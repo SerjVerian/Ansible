@@ -1,0 +1,24 @@
+- name: Creación de usuarios, y permiso de sudo sin pass
+  hosts: all
+  vars:
+    - usuarios: ["Pepe","Paco","Julio"]
+    - grupoPrueba: "webadmin"
+    - upassword: "12345"
+  tasks:
+  - include: includeCreacionUsuarios.yml
+  - name: Deshabilitar login ssh usuario
+    lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      #dest: "/etc/ficheroPruebas"
+      insertbefore: "^DenyUsers"
+      line: "DenyUsers  {{ item }}"
+    with_items:
+     - "{{ usuarios}}"
+    notify:
+     - restart ssh
+  handlers:
+  - name: restart ssh
+    service:
+     name: sshd
+     state: restarted

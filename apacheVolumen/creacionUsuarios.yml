@@ -1,0 +1,31 @@
+- name: Creación usuarios
+  hosts: all
+  vars:
+    - usuario1: "Pepe"
+    - usuario2: "Paco"
+    - usuario3: "Julio"
+    - usuario4: "Pepe"
+    - grupoPrueba: "Automaticos" 
+    - upassword: "12345"
+  tasks:
+    - name: Crear Grupo
+      group: name={{ grupoPrueba }} state=present
+
+    - name: Crear Usuarios
+      #Encripta la passw
+      user: name={{ item.nombre }} password= {{ upassword | password_hash('sha512') }} state=present groups={{ item.grupo }}
+      #Desabilita la passw, incluyendo ! al principio en el fichero passwd
+      #user: name={{ item.nombre }} password='!' state=present groups={{ item.grupo }}
+      with_items:
+      - {nombre: "{{ usuario1 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario2 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario3 }}", grupo: "{{ grupoPrueba }}"}
+      - {nombre: "{{ usuario4 }}", grupo: "{{ grupoPrueba }}"}
+      
+
+    
+      
+
+      
+        
+        

@@ -1,0 +1,88 @@
+---
+#simple 1 GB partition
+- name: crear partición
+  parted:
+    device: /dev/sdb
+    number: 1
+    flags: [ lvm ]
+    state: present
+    part_end: 1GB
+
+- name: Instalar dependencia lvm2
+  package:
+    name: lvm2
+    state: present
+
+- name: Crear grupo de volumen
+  lvg:
+      vg: apache
+      pvs: /dev/sdb1
+      pesize: 16
+
+- name: Crear volumen lógico 1
+  lvol:
+      vg: apache
+      lv:  conf
+      size: 300m
+      force: yes
+
+- name: Crear volumen lógico 2
+  lvol:
+      vg: apache
+      lv:  logs
+      size: 300m
+      force: yes
+
+- name: Crear volumen lógico 3
+  lvol:
+      vg: apache
+      lv:  estaticos
+      size: 300m
+      force: yes
+
+- name: Crear directorio data1 si no existe
+  file:
+    path: /data1
+    state: directory
+    mode: '0755'
+
+- name: Instalar dependencia para formateo posterior
+  ansible.builtin.apt:
+    name: xfsprogs
+    state: present
+
+- name: formatear xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/apache/estaticos
+
+- name: formatear xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/apache/logs
+
+- name: formatear xfs filesystem
+  filesystem:
+    fstype: xfs
+    dev: /dev/apache/conf
+
+- name: montar lv1 en data1
+  mount:
+    path: /data1
+    src: /dev/apache/estaticos
+    fstype: xfs
+    state: mounted
+
+- name: montar lv2 en data1
+  mount:
+    path: /data1
+    src: /dev/apache/logs
+    fstype: xfs
+    state: mounted
+
+- name: montar lv3 en data1
+  mount:
+    path: /data1
+    src: /dev/apache/conf
+    fstype: xfs
+    state: mounted

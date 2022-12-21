@@ -1,0 +1,30 @@
+- name: Instalar apache2
+  apt: name=apache2 state=latest
+  when: ansible_distribution=="Debian" or ansible_distribution == "Ubuntu"
+- name: Instalar httpd
+  yum: name=httpd state=latest
+  when: ansible_distribution == "CentOS"
+
+- name: Iniciar Servicio
+  service: name=apache2 state=started
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: Iniciar Servicio
+  service: name=httpd state=started
+  when: ansible_distribution == "CentOS"
+
+## En este fichero inicial (dentro de files), estamos indicandole la configuracion para que el directorio /var/www/html
+##este servidor por apache
+- name: Copiar fichero condiguracion apache
+  copy: src=httpd.conf dest=/etc/httpd/httpd.conf
+  when: ansible_distribution == "CentOS"
+  notify: restart_httpd
+
+- name: Copiar fichero condiguracion apache
+  copy: src=httpd.conf dest=/etc/apache2/apache2.conf
+  when: ansible_distribution=="Debian" or ansible_distribution == "Ubuntu"
+  notify: restart_apache2
+## Plantilla de la pagina de cntingencia
+- name: Copiar fichero index.html
+  template: src=index.html.j2 dest=/var/www/html/index.html
+
