@@ -3,7 +3,7 @@
   when: ansible_distribution=="Debian" or ansible_distribution == "Ubuntu"
 - name: Instalar httpd
   yum: name=httpd state=latest
-  when: ansible_distribution == "CentOS"
+  when: ansible_distribution == "CentOS" or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Iniciar Servicio
   service: name=apache2 state=started
@@ -11,13 +11,13 @@
 
 - name: Iniciar Servicio
   service: name=httpd state=started
-  when: ansible_distribution == "CentOS"
+  when: ansible_distribution == "CentOS" or ansible_distribution == 'Red Hat Enterprise Linux'
 
 ## En este fichero inicial (dentro de files), estamos indicandole la configuracion para que el directorio /var/www/html
 ##este servidor por apache
 - name: Copiar fichero condiguracion apache
   copy: src=httpd.conf dest=/etc/httpd/httpd.conf
-  when: ansible_distribution == "CentOS"
+  when: ansible_distribution == "CentOS" or ansible_distribution == 'Red Hat Enterprise Linux'
   notify: restart_httpd
 
 - name: Copiar fichero condiguracion apache
