@@ -1,17 +1,17 @@
 - name: Instalar apache2
   apt: name=apache2 state=latest
-  when: ansible_distribution=="Debian" or ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 - name: Instalar httpd
   yum: name=httpd state=latest
-  when: ansible_distribution == "CentOS" or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == "RedHat"
 
 - name: Iniciar Servicio
   service: name=apache2 state=started
-  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
 
 - name: Iniciar Servicio
   service: name=httpd state=started
-  when: ansible_distribution == "CentOS" or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == "RedHat"
 
 ## En este fichero inicial (dentro de files), estamos indicandole la configuracion para que el directorio /var/www/html
 ##este servidor por apache
@@ -22,7 +22,7 @@
 
 - name: Copiar fichero condiguracion apache
   copy: src=httpd.conf dest=/etc/apache2/apache2.conf
-  when: ansible_distribution=="Debian" or ansible_distribution == "Ubuntu"
+  when: ansible_os_family == "Debian"
   notify: restart_apache2
 ## Plantilla de la pagina de cntingencia
 - name: Copiar fichero index.html
