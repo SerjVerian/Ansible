@@ -26,5 +26,5 @@
   notify: restart_apache2
 ## Plantilla de la pagina de cntingencia
 - name: Copiar fichero index.html
-  template: src=index.html.j2 dest=/var/www/html/index.html
+  template: src=index.html.j2 dest={{ destino }}
 
